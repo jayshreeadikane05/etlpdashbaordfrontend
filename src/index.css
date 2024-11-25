@@ -11,3 +11,15 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+
+.sidebar .nav.sub-menu .nav-item .nav-link {
+  color: #d9d9d9;
+}
+
+.sidebar .nav .nav-item .nav-link {
+  color: #fdfdfd;
+}
+
+
+/* Email Editor */
+
