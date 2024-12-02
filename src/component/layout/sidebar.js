@@ -80,10 +80,10 @@ const Sidebar = () => {
           </li>
           <li
             className={`nav-item menu-items ${
-              currentPath === '/create-email-template' ? 'active' : ''
+              currentPath === '/email-template' ? 'active' : ''
             }`}
           >
-          <Link className="nav-link" to="/create-email-template">
+          <Link className="nav-link" to="/email-template">
           
               <span className="menu-icon">
                 <i className="mdi mdi-playlist-play"></i>

@@ -205,21 +205,21 @@ const Canvas = ({ elements, setElements, selectedElement, setSelectedElement }) 
     }}
   >
     {element.type === "TEXT" && (
-     
-        <input
-          type="text"
-          value={element.content}
-          onChange={(e) => handleContentChange(e, element.id)}
-          style={{
-            fontSize: element.properties?.fontSize || "16px",
-            color: element.properties?.color || "#000",
-            textAlign: element.properties?.textAlign || "left",
-            width: "100%",
-            border: "1px solid #ccc",
-            padding: "5px",
-          }}
-        />
+      <input
+        type="text"
+        value={element.content}
+        onChange={(e) => handleContentChange(e, element.id)}
+        style={{
+          fontSize: element.properties?.fontSize || "16px",
+          color: element.properties?.color || "#000",
+          textAlign: element.properties?.textAlign || "left",
+          width: "100%",
+          border: "1px solid #ccc",
+          padding: "5px",
+        }}
+      />
     )}
+
 
           {element.type === "PARAGRAPH" && (
             <textarea

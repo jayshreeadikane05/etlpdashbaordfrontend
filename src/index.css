@@ -19,7 +19,13 @@ code {
 .sidebar .nav .nav-item .nav-link {
   color: #fdfdfd;
 }
-
+/* Hide Unlayer branding */
+#unlayer-editor .unlayer-branding {
+  display: none !important;
+}
+.gBWltW .blockbuilder-branding {
+  display: none !important;
+}
 
 /* Email Editor */
 
