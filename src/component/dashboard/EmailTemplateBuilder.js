@@ -13,7 +13,7 @@ const EmailTemplateBuilder = () => {
   const [templateData, setTemplateData] = useState(null);
   const [templateName, setTemplateName] = useState("Sample Template");
   const [isTemplateSaved, setIsTemplateSaved] = useState(false);
-  const [isTemplateLoaded, setIsTemplateLoaded] = useState(false); // New state to track template loading
+  const [isTemplateLoaded, setIsTemplateLoaded] = useState(false); 
 
   const template = templateData || { design: {} };
 
