@@ -29,7 +29,6 @@ const CreateEmailTemplate = () => {
     fetchTemplates();
   }, []);
 
-  // Fetch a specific template by ID
   const fetchTemplateById = async (id) => {
     const token = Cookies.get("token");
     try {
@@ -43,12 +42,10 @@ const CreateEmailTemplate = () => {
     }
   };
 
-  // Load design into the email editor
   const loadDesign = (design) => {
     emailEditorRef.current.editor.loadDesign(design || {});
   };
 
-  // Redirect and load the editor with the selected template
   const editTemplate = async (template) => {
     const templateData = await fetchTemplateById(template._id);
     if (templateData) {
@@ -57,19 +54,16 @@ const CreateEmailTemplate = () => {
   };
   
 
-  // Create a blank template
   const createBlankTemplate = () => {
-    const blankDesign = {}; // Empty design for a new template
+    const blankDesign = {}; 
     navigate("/create-email-template", { state: { template: { design: blankDesign } } });
   };
   const updateDesign = async () => {
     const token = Cookies.get("token");
-    const currentDesign = await emailEditorRef.current.editor.saveDesign(); // Get the current design from the editor
-    const templateId = selectedTemplate ? selectedTemplate._id : null; // Determine if we're editing an existing template
-  
+    const currentDesign = await emailEditorRef.current.editor.saveDesign(); 
+    const templateId = selectedTemplate ? selectedTemplate._id : null; 
     try {
       if (templateId) {
-        // Update existing template
         await axios.put(
           `http://localhost:8000/api/pri/updateTemplate/${templateId}`,
           { design: currentDesign },
@@ -79,7 +73,6 @@ const CreateEmailTemplate = () => {
         );
         alert("Template updated successfully!");
       } else {
-        // Create new template
         await axios.post(
           "http://localhost:8000/api/pri/createTemplate",
           { design: currentDesign },
@@ -89,7 +82,7 @@ const CreateEmailTemplate = () => {
         );
         alert("Template created successfully!");
       }
-      navigate("/create-email-template"); // Redirect back to template list
+      navigate("/create-email-template"); 
     } catch (error) {
       console.error("Error saving template:", error);
       alert("Failed to save template");
@@ -101,7 +94,6 @@ const CreateEmailTemplate = () => {
       <h1>Template Gallery</h1>
 
       {selectedTemplate ? (
-        // Email Editor Section
         <div>
           <button className="btn btn-secondary mb-3" onClick={() => setSelectedTemplate(null)}>
             Back to Templates
@@ -114,7 +106,6 @@ const CreateEmailTemplate = () => {
           </button>
         </div>
       ) : (
-        // Template Gallery Section
         <>
           {loading ? (
             <p>Loading templates...</p>
@@ -135,7 +126,7 @@ const CreateEmailTemplate = () => {
                 </div>
               </div>
 
-              {/* Render Saved Templates */}
+              {/* Render Saved Templates*/}
               {templates.map((template) => (
                 <div key={template.id} className="col-md-3">
                   <div className="card" style={{ margin: "10px" }}>

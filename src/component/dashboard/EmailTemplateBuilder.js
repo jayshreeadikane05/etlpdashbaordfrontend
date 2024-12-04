@@ -3,6 +3,8 @@ import EmailEditor from "react-email-editor";
 import axios from "axios";
 import Cookies from 'js-cookie';
 import { useLocation } from "react-router-dom";
+import JSZip from 'jszip';
+import { saveAs } from 'file-saver';
 
 const EmailTemplateBuilder = () => {
   const location = useLocation();
@@ -30,14 +32,41 @@ const EmailTemplateBuilder = () => {
   };
 
   const toolsConfig = {};
-
   const exportHtml = () => {
     emailEditorRef.current.editor.exportHtml((data) => {
       const { design, html } = data;
-      console.log("Exported HTML:", html);
-      alert("Output HTML has been logged in your developer console.");
+      const modifiedHtml = html.replace('<head>', `<head>\n  <title>${templateName}</title>`);
+      const zip = new JSZip();
+      const htmlFileName = `${templateName}.html`;
+      zip.file(htmlFileName, modifiedHtml); 
+      const imageUrls = design.body?.rows?.flatMap(row => row?.cells?.map(cell => cell?.imageSrc)) || [];
+      
+      const imagePromises = imageUrls.map((url, index) => {
+        if (url) {
+          return axios.get(url, { responseType: 'blob' }).then(response => {
+            const imageName = `image_${index + 1}.jpg`;
+            zip.file(imageName, response.data);
+          }).catch((error) => {
+            console.error(`Error downloading image ${index + 1}:`, error);
+          });
+        } else {
+          console.warn(`Skipping invalid image URL at index ${index + 1}`);
+          return Promise.resolve(); 
+        }
+      });
+  
+      Promise.all(imagePromises)
+        .then(() => {
+          zip.generateAsync({ type: 'blob' }).then((content) => {
+            saveAs(content, 'design.zip');
+          });
+        })
+        .catch((error) => {
+          console.error('Error downloading images:', error);
+        });
     });
   };
+  
 
   const saveDesign = () => {
     emailEditorRef.current.editor.saveDesign((design) => {
@@ -93,6 +122,7 @@ const EmailTemplateBuilder = () => {
         });
     });
   };
+  
 
   const onLoad = () => {
     const emptyDesign = {
@@ -101,29 +131,51 @@ const EmailTemplateBuilder = () => {
         values: {},
       },
     };
-    emailEditorRef.current.editor.loadDesign(emptyDesign);
+    if (emailEditorRef.current && emailEditorRef.current.editor) {
+      emailEditorRef.current.editor.loadDesign(template.design);
+      setTemplateId(template._id);
+      setIsTemplateSaved(true);
+    }
   };
-
-  useEffect(() => {
-    console.log("location>>>", location);
-    console.log("location>>>", location?.state);
   
+  const fetchTemplateById = async () => {
+    const token = Cookies.get("token");
+    const id = location?.state?.template?._id;
+    try {
+      const response = await axios.get(`http://localhost:8000/api/pri/getTemplate/${id}`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      return response.data.data;
+    } catch (error) {
+      console.error("Error fetching template by ID:", error);
+      return null;
+    }
+  };
+  
+  useEffect(() => {
     if (location?.state?.template) {
       const { template } = location.state;
       setTemplateData(template);
       setTemplateName(template.name);
-      setIsTemplateLoaded(true); 
+      setIsTemplateLoaded(true);
+      setTemplateId(template._id);
     }
   }, [location?.state?.template]);
   
+
   useEffect(() => {
-    if (isTemplateLoaded && emailEditorRef.current && emailEditorRef.current.editor) {
-      if (template && template.design) {
-        emailEditorRef.current.editor.loadDesign(template.design); 
+    if (template?.design) {
+      if (emailEditorRef.current && emailEditorRef.current.editor) {
+        emailEditorRef.current.editor.loadDesign(template.design);
+        setTemplateId(template._id);
       }
+    } else {
+      console.log("Template design is not yet available");
     }
-  }, [isTemplateLoaded, template]);
+  }, [template]);
   
+  
+
   return (
     <div className="row">
       <div className="col-12">
@@ -217,4 +269,4 @@ const EmailTemplateBuilder = () => {
   );
 };
 
-export default EmailTemplateBuilder;
+export default EmailTemplateBuilder; //
