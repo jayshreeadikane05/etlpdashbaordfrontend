@@ -7913,8 +7913,7 @@ pre {
 .row {
   display: flex;
   flex-wrap: wrap;
-  margin-right: -0.75rem;
-  margin-left: -0.75rem; }
+  }
 
 .no-gutters {
   margin-right: 0;
@@ -15747,7 +15746,7 @@ code {
     margin-bottom: 0; }
 
 .page-title {
-  color: #ffffff;
+  color: #000;
   font-size: 1.125rem;
   margin-bottom: 0; }
   .page-title .page-title-icon {
@@ -21130,7 +21129,7 @@ div.tagsinput {
 
 .content-wrapper {
   background: #fff;
-  
+  padding: 1.875rem 1.75rem;
   width: 100%;
   -webkit-flex-grow: 1;
   flex-grow: 1; }
