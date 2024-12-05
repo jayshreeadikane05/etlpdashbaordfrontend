@@ -138,8 +138,9 @@ const CreateEmailTemplate = () => {
                   <div className="card" style={{ margin: "10px" }}>
                     <div className="card-body">
                       <h5 className="card-title">Blank Template</h5>
+                      <p className="card-subtitle text-white">Start From Scratch</p>
                       <button
-                        className="btn btn-outline-warning btn-fw"
+                        className="btn btn-outline-warning"
                         onClick={createBlankTemplate}
                       >
                         Create Template
@@ -163,9 +164,9 @@ const CreateEmailTemplate = () => {
                       />
                       <div className="card-body">
                         <h5 className="card-title">{template.name}</h5>
-                        <div className="overlay"></div>
+                      
                         <button
-                          className="btn btn-outline-light btn-fw"
+                          className="btn btn-outline-light"
                           onClick={() => editTemplate(template)}
                         >
                           Edit Template
